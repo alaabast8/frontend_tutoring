@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { studentService } from '../services/Students';
 import { doctorService } from '../services/Doctors';
 import './login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState('student');
-  const [isRegistering, setIsRegistering] = useState(false); // New state to toggle mode
+  const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({ username: '', password: '', email: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,19 +22,35 @@ const Login = () => {
     setLoading(true);
 
     try {
-      let data;
       const service = role === 'student' ? studentService : doctorService;
 
       if (isRegistering) {
-        // Handle Registration
-        data = await service.register(formData); 
+        // --- REGISTRATION FLOW ---
+        const data = await service.register(formData); 
         alert(`Account created successfully for ${data.username}! You can now login.`);
-        setIsRegistering(false); // Switch back to login after successful registration
+        setIsRegistering(false); 
       } else {
-        // Handle Login
-        data = await service.login(formData.username, formData.password);
-        alert(`Welcome back, ${data.username}!`);
-        console.log("Login Success:", data);
+        // --- LOGIN FLOW ---
+        const data = await service.login(formData.username, formData.password);
+        
+        if (role === 'student') {
+          // 1. Check if the student has a profile in student_info
+          // We use data.id which should come from your login response
+          const profileStatus = await studentService.checkProfile(data.id);
+
+          if (profileStatus.exists) {
+            // 2a. Profile exists -> Go to Dashboard
+            alert(`Welcome back, ${data.username}!`);
+            navigate('/dashboard'); 
+          } else {
+            // 2b. Profile missing -> Go to student_main to fill data
+            alert("Please complete your profile details to continue.");
+            navigate('/student-main', { state: { studentId: data.id } });
+          }
+        } else {
+          // Doctor login logic
+          navigate('/doctor-dashboard');
+        }
       }
     } catch (err) {
       setError(err.message || "An error occurred. Please try again.");
@@ -62,7 +80,6 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Email field only shows during registration */}
           {isRegistering && (
             <div className="input-group">
               <label>Email Address</label>
