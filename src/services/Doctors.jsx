@@ -1,5 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const DOCTOR_URL = `${API_BASE_URL}/doctors`;
+const DOCTOR_INFO_URL = `${API_BASE_URL}/doctor-info`;
 
 export const doctorService = {
   register: async (formData) => {
@@ -37,5 +38,24 @@ export const doctorService = {
   }
 
   return data;
-}
+},
+checkProfile: async (doctorId) => {
+  if (!doctorId) {
+    throw new Error("CheckProfile failed: doctorId is undefined");
+  }
+  const response = await fetch(`${DOCTOR_INFO_URL}/check/${doctorId}`);
+  const data = await response.json();
+  if (!response.ok) throw new Error("Failed to check profile status");
+  return data;
+},
+  createProfile: async (profileData) => {
+    const response = await fetch(`${DOCTOR_INFO_URL}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileData),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Failed to create profile");
+    return data;
+  }
 };
