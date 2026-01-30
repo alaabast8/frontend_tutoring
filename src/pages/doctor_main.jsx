@@ -41,8 +41,9 @@ const DoctorMain = () => {
       <h2>Complete Your Professional Profile</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <label>University Name</label>
+          <label htmlFor="uni_name">University Name</label>
           <input 
+            id="uni_name"
             type="text" 
             required 
             value={formData.uni_name}
@@ -50,8 +51,9 @@ const DoctorMain = () => {
           />
         </div>
         <div className="input-group">
-          <label>Faculty</label>
+          <label htmlFor="faculty">Faculty</label>
           <input 
+            id="faculty"
             type="text" 
             required 
             value={formData.faculty}
@@ -59,8 +61,9 @@ const DoctorMain = () => {
           />
         </div>
         <div className="input-group">
-          <label>Department</label>
+          <label htmlFor="department">Department</label>
           <input 
+            id="department"
             type="text" 
             required 
             value={formData.department}
@@ -68,8 +71,9 @@ const DoctorMain = () => {
           />
         </div>
         <div className="input-group">
-          <label>Start Teaching Year</label>
+          <label htmlFor="start_teaching_year">Start Teaching Year</label>
           <input 
+            id="start_teaching_year"
             type="number" 
             required 
             value={formData.start_teaching_year}
