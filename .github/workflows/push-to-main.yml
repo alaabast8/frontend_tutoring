@@ -32,8 +32,17 @@ jobs:
       - name: Push to Main (Production)
         if: success()
         run: |
+          # Configure Git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout main || git checkout -b main
+          
+          # Clean up any changes made by npm install (like package-lock.json)
+          git reset --hard
+          
+          # Force checkout main and merge staging
+          git fetch origin main
+          git checkout -f main
           git merge staging --no-edit
+          
+          # Push using the built-in token
           git push origin main
