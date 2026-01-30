@@ -1,0 +1,23 @@
+name: Sync Dev to Staging
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  push-to-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history for all branches
+
+      - name: Push to Staging Branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout staging || git checkout -b staging
+          git merge dev --no-edit
+          git push origin staging
