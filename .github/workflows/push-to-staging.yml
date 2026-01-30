@@ -5,6 +5,10 @@ on:
     branches:
       - dev
 
+# Add this block here
+permissions:
+  contents: write
+
 jobs:
   push-to-staging:
     runs-on: ubuntu-latest
@@ -12,12 +16,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches all history for all branches
+          fetch-depth: 0 
 
       - name: Push to Staging Branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Ensure staging is up to date before merging
+          git fetch origin staging
           git checkout staging || git checkout -b staging
+          
           git merge dev --no-edit
           git push origin staging
