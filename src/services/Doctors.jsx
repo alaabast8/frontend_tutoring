@@ -34,7 +34,7 @@ export const doctorService = {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Doctor login failed");
+    throw new Error(data.detail || "Doctor login fvddfailed");
   }
 
   return data;
