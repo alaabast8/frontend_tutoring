@@ -1,0 +1,31 @@
+name: Dev Branch Integration
+
+on:
+  pull_request:
+    branches:
+      - dev  # Triggers on pull requests targeting the dev branch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      # Step 1 from image: Build the app
+      - name: Build the app
+        run: npm run build
+
+      # Step 2 from image: Run integration tests
+      - name: Run integration tests
+        run: npm test  # This runs your Vitest integration suite
