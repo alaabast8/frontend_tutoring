@@ -1,0 +1,39 @@
+name: Staging to Production
+
+on:
+  push:
+    branches: [ staging ]
+
+jobs:
+  production-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build App
+        run: npm run build
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run All Tests (E2E)
+        run: npx playwright test
+
+      - name: Push to Main (Production)
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main || git checkout -b main
+          git merge staging --no-edit
+          git push origin main
