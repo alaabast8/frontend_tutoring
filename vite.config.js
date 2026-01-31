@@ -7,5 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/setupTests.js',
+    // Add this line below to ignore Playwright files
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/tests/**'],
   },
 });

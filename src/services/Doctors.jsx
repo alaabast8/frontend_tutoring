@@ -15,7 +15,7 @@ export const doctorService = {
       }),
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || "Doctor registration failed");
+    if (!response.ok) throw new Error(data.detail || "Doctor registration failed ggg");
     return data;
   },
 
@@ -34,7 +34,7 @@ export const doctorService = {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Doctor login fvddfailed");
+    throw new Error(data.detail || "Doctor login fvddfailed frgf");
   }
 
   return data;
