@@ -5,27 +5,33 @@ on:
     branches:
       - dev
 
-# Add this block here
 permissions:
   contents: write
 
 jobs:
-  push-to-staging:
+  # This is the name the second job is looking for
+  sync-branches:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
-      - name: Push to Staging Branch
+      - name: Sync Dev to Staging
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Ensure staging is up to date before merging
           git fetch origin staging
           git checkout staging || git checkout -b staging
-          
           git merge dev --no-edit
           git push origin staging
+
+  # This job depends on the one above
+  trigger-production:
+    needs: sync-branches 
+    uses: ./.github/workflows/push-to-main.yml
+    permissions:
+      contents: write
+    secrets: inherit
