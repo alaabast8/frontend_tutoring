@@ -1,0 +1,46 @@
+name: Staging to Production (Reusable)
+
+on:
+  workflow_call: # This allows it to be called by another workflow
+
+jobs:
+  production-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Essential for the push to main
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: staging # Ensure we are building the code from staging
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build App
+        run: npm run build
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run All Tests (E2E)
+        run: npx playwright test
+
+      - name: Push to Main (Production)
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git reset --hard
+          git fetch origin main
+          git checkout -f main
+          git merge staging --no-edit
+          git push origin main

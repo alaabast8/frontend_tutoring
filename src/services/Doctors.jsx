@@ -34,14 +34,14 @@ export const doctorService = {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Doctor login failed euefo");
+    throw new Error(data.detail || "Doctor login fvddfailed");
   }
 
   return data;
 },
 checkProfile: async (doctorId) => {
   if (!doctorId) {
-    throw new Error("CheckProfile failed: doctorId is undefined ...");
+    throw new Error("CheckProfile failed: doctorId is undefined");
   }
   const response = await fetch(`${DOCTOR_INFO_URL}/check/${doctorId}`);
   const data = await response.json();
