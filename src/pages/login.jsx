@@ -6,7 +6,7 @@ import './login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState('student');
+  const [role, setRole] = useState('student'); // 'student' or 'doctor'
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({ 
     username: '', 
@@ -19,7 +19,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.name === 'price' ? parseFloat(e.target.value) : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -31,10 +32,12 @@ const Login = () => {
       const service = role === 'student' ? studentService : doctorService;
 
       if (isRegistering) {
+        // Register logic
         await service.register(formData); 
         alert(`Account created successfully! You can now login.`);
-        setIsRegistering(false); 
+        setIsRegistering(false); // Switch back to login view
       } else {
+        // Login logic
         const data = await service.login(formData.username, formData.password);
         const actualId = data.id || data.doctor_id || (data.data && data.data.id);
 
@@ -70,7 +73,8 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {isRegistering && (
+          {/* Email is only for Student Registration */}
+          {isRegistering && role === 'student' && (
             <div className="input-group">
               <label htmlFor="email">Email Address</label>
               <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
@@ -87,12 +91,35 @@ const Login = () => {
             <input id="password" type="password" name="password" value={formData.password} onChange={handleChange} required />
           </div>
 
+          {/* Doctor specific registration fields */}
+          {isRegistering && role === 'doctor' && (
+            <>
+              <div className="input-group">
+                <label htmlFor="contact">Contact Number</label>
+                <input id="contact" type="text" name="contact" value={formData.contact} onChange={handleChange} required />
+              </div>
+              <div className="input-group">
+                <label htmlFor="price">Consultation Price</label>
+                <input id="price" type="number" name="price" value={formData.price} onChange={handleChange} required />
+              </div>
+            </>
+          )}
+
           {error && <p className="error-message">{error}</p>}
 
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? 'Processing...' : (isRegistering ? 'Create Account' : 'Login')}
           </button>
         </form>
+
+        <div className="toggle-auth">
+          <p>
+            {isRegistering ? 'Already have an account?' : "Don't have an account?"}
+            <button type="button" className="link-btn" onClick={() => setIsRegistering(!isRegistering)}>
+              {isRegistering ? 'Login here' : 'Register here'}
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
