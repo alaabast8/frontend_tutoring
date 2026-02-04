@@ -8,7 +8,9 @@ const UNIVERSITIES = ["Harvard University", "MIT", "Stanford University", "Unive
 const COUNTRIES = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Other"];
 const LANGUAGES = ["English", "Spanish", "Mandarin", "French", "Arabic", "German", "Other"];
 const FACULTIES = ["Engineering", "Arts & Sciences", "Business", "Medicine", "Law"];
+const DEPARTMENTS = ["Computer Science", "Mechanical Engineering", "Electrical Engineering", "Civil Engineering", "Economics", "Mathematics", "Physics", "Chemistry", "Biology"];
 const MAJORS = ["Computer Science", "Mechanical Engineering", "Economics", "Biology", "Psychology"];
+const ATHLETIC_STATUS = ["Inactive", "Recreational", "Varsity", "Professional"];
 
 const StudentMain = () => {
   const { state } = useLocation();
@@ -24,9 +26,8 @@ const StudentMain = () => {
     major: '',
     dob: '',
     academic_year: 1,
-    gpa: 0,
     disability: false,
-    athletic_status: '',
+    athletic_status: 'Inactive',
     country_of_origin: '',
     country_of_residence: '',
     gender: '',
@@ -132,7 +133,7 @@ const StudentMain = () => {
             </div>
             <div className="input-group">
               <label>Study Hours / Week</label>
-              <input type="number" name="study_hours" value={info.study_hours} onChange={handleChange} required />
+              <input type="number" name="study_hours" value={info.study_hours} onChange={handleChange} required min="0" />
             </div>
           </div>
 
@@ -146,23 +147,47 @@ const StudentMain = () => {
               </select>
             </div>
             <div className="input-group">
+              <label>Department</label>
+              <select name="department" value={info.department} onChange={handleChange} required>
+                <option value="" disabled>Select Department</option>
+                {renderOptions(DEPARTMENTS)}
+              </select>
+            </div>
+          </div>
+
+          {/* Major and Academic Year */}
+          <div className="form-grid">
+            <div className="input-group">
               <label>Major</label>
               <select name="major" value={info.major} onChange={handleChange} required>
                 <option value="" disabled>Select Major</option>
                 {renderOptions(MAJORS)}
               </select>
             </div>
+            <div className="input-group">
+              <label>Academic Year</label>
+              <select name="academic_year" value={info.academic_year} onChange={handleChange} required>
+                <option value="1">Year 1</option>
+                <option value="2">Year 2</option>
+                <option value="3">Year 3</option>
+                <option value="4">Year 4</option>
+                <option value="5">Year 5</option>
+              </select>
+            </div>
           </div>
 
-          {/* Final Details */}
+          {/* Date of Birth and Athletic Status */}
           <div className="form-grid">
             <div className="input-group">
               <label>Date of Birth</label>
               <input type="date" name="dob" value={info.dob} onChange={handleChange} required />
             </div>
             <div className="input-group">
-              <label>GPA</label>
-              <input type="number" name="gpa" step="0.01" value={info.gpa} onChange={handleChange} required />
+              <label>Athletic Status</label>
+              <select name="athletic_status" value={info.athletic_status} onChange={handleChange} required>
+                <option value="" disabled>Select Athletic Status</option>
+                {renderOptions(ATHLETIC_STATUS)}
+              </select>
             </div>
           </div>
 

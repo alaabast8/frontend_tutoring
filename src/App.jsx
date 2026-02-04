@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import StudentMain from './pages/student_main'; 
-import DoctorMain from './pages/doctor_main'; // 1. Import your DoctorMain
+import DoctorMain from './pages/doctor_main';
+import StudentDashboard from './pages/main_dashboard';
 import './App.css';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           
           {/* Student Routes */}
           <Route path="/student-main" element={<StudentMain />} />
-          <Route path="/dashboard" element={<div><h1>Student Dashboard Content</h1></div>} />
+          <Route path="/dashboard" element={<StudentDashboard />} />
           
           {/* Doctor Routes */}
           <Route path="/doctor-main" element={<DoctorMain />} /> {/* 2. Add this */}

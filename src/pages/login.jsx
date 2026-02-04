@@ -45,6 +45,9 @@ const Login = () => {
           throw new Error("Login successful, but no ID was returned.");
         }
 
+        localStorage.setItem('studentId', actualId);
+        localStorage.setItem('username', formData.username);
+
         const profileStatus = await service.checkProfile(actualId);
 
         if (profileStatus.exists) {
