@@ -49,5 +49,57 @@ export const studentService = {
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || "Failed to save profile");
     return data;
+  },
+  // 5. Get existing profile details (REQUIRED for Dashboard)
+  getProfile: async (studentId) => {
+    const response = await fetch(`${INFO_URL}/${studentId}`);
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.detail || "Failed to fetch profile");
+    }
+    return await response.json();
+  },
+
+  // 6. Logout and clear data
+  logout: () => {
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('username');
+    // If you use tokens, clear them here too
+  },
+
+    // Get predicted GPA for student
+  getPredictedGPA: async (studentId) => {
+    const id = studentId || localStorage.getItem('studentId');
+    
+    if (!id) {
+      throw new Error('No student ID found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/ml/predict-gpa/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to get GPA prediction');
+    }
+    
+    return response.json();
+  },
+
+  // Change this in your studentService object
+getDoctorsByDepartmentAndFaculty: async (faculty) => {
+  // Use a template literal to inject the faculty variable correctly
+  const response = await fetch(
+    `${API_BASE_URL}/doctor-info/filter/?faculty=${encodeURIComponent(faculty)}`
+  );
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch doctors');
   }
+  
+  return response.json();
+},
 };

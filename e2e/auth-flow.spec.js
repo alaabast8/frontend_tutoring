@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const APP_URL = 'http://localhost:5173'; // Change to your local dev URL
+const APP_URL = 'http://localhost:5173'; // Change to your local dev URLgrg
 
 test.describe('Authentication Flows', () => {
 
