@@ -19,7 +19,7 @@ jobs:
         run: npm i -g @railway/cli
 
       - name: Deploy to Railway
-        # This matches the service name 'frontend' in your Railway architecture
+        # Ensure this service name 'frontend' exactly matches your Railway dashboard
         run: railway up --service frontend
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
