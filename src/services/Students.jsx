@@ -1,6 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const STUDENT_URL = `${API_BASE_URL}/students`;
-const INFO_URL = `${API_BASE_URL}/student-info`; // This line was likely missing!ffdfdf
+const INFO_URL = `${API_BASE_URL}/student-info`; // This line was likely missing!ffdfdfyyy
 
 export const studentService = {
   // 1. Register a new account
