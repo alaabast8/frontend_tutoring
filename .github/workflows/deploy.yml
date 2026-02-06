@@ -18,8 +18,8 @@ jobs:
       - name: Install Railway CLI
         run: npm i -g @railway/cli
 
-      - name: Deploy Image to Railway
-        # We use 'railway domain' or 'railway up' with the specific image
-        run: railway up --service frontend --detach
+      - name: Deploy to Railway
+        # This matches the service name 'frontend' in your Railway architecture
+        run: railway up --service frontend
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

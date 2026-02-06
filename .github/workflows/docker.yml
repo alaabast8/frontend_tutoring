@@ -27,7 +27,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend-app
+        images: ${{ secrets.DOCKERHUB_USERNAME }} /react-frontend-app
         tags: |
           type=raw,value=latest
           type=sha,prefix={{branch}}-
