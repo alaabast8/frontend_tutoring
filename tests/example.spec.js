@@ -15,7 +15,7 @@ test.describe('Portal E2E Authentication', () => {
       await dialog.accept();
     });
 
-    // Check if redirected back to loginff
+    // Check if redirected back to loginfffff
     await expect(page).toHaveURL(/.*login/);
   });
 
