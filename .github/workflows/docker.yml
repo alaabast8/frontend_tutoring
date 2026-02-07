@@ -3,16 +3,23 @@ name: Build and Push React Frontend to Docker Hub
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: ["Sync Dev to Staging"]
+    types:
+      - completed
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    # Only run if the sync was successful
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name != 'workflow_run' }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        # Crucial: If triggered by workflow_run, we must explicitly checkout main
+        ref: main
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -27,7 +34,6 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        # Fixed the space after the username here
         images: ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend-app
         tags: |
           type=raw,value=latest

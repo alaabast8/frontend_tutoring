@@ -33,7 +33,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run All Tests (E2E)
+      - name: Run Tests
         run: npx playwright test
 
       - name: Push to Main (Production)
