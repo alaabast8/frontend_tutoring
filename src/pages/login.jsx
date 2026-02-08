@@ -35,7 +35,7 @@ const Login = () => {
         // Register logic
         await service.register(formData); 
         alert(`Account created successfully! You can now login.`);
-        setIsRegistering(false); // Switch back to login view
+        setIsRegistering(false); // Switch back to login viewmm
       } else {
         // Login logic
         const data = await service.login(formData.username, formData.password);
